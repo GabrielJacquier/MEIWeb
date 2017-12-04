@@ -30,7 +30,7 @@
 				</ul>
 			</div>
 		</nav>
-	
+			
 		<section class="container-fluid mt-md-5">
 			<div class="row">
 				<div class="col-lg-12">
@@ -38,8 +38,23 @@
 						<h2>Buscador de CNAE</h2>
 						<p>Abaixo voce poderá inserir uma descrição relacionada com a
 							atividade que será o ramo de atividade de sua microempresa - Mei</p>
+
+						<div class="navcnae">
+							<ul class="nav nav-tabs">
+							  <li class="nav-item" ng-click="trocarDescricao()">
+							    <a class="nav-link" ng-class="{active: descricaoCheck}" href="#">Descrição</a>
+							  </li>
+							  <li class="nav-item" ng-click="trocarOcupacao()">
+							    <a class="nav-link" ng-class="{active: ocupacaoCheck}" href="#">Ocupação</a>
+							  </li>
+							  <li class="nav-item" ng-click="trocarCodigo()">
+							    <a class="nav-link" ng-class="{active: codigoCheck}" href="#">Código</a>
+							  </li>
+							</ul>
+						</div>
+
 						<div class="input-group input-group-lg ">
-							<input type="text" ng-model="descricao" class="form-control" placeholder="Buscar CNAE..." aria-label="Pesquisar CNAE...">
+							<input type="text" ng-model="descricao" class="form-control" placeholder="Buscar..." aria-label="Pesquisar CNAE...">
 							<span class="input-group-btn">
 								<button class="btn btn-primary" type="button" ng-click="buscar()">Buscar!</button>
 							</span>
@@ -53,7 +68,9 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="col-lg-10 tabela">
-						<table class="table table-striped">
+					
+					<!-- Descrição -->
+						<table class="table table-striped" ng-if="descricaoCheck">
 							<thead>
 								<tr>
 									<th style="width:150px;"> Código</th>
@@ -61,9 +78,41 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="atividade in atividades">
+								<tr ng-repeat="atividade in atividadesDescricao">
 									<td>{{atividade.codigoCNAE}}</td>
 									<td>{{atividade.descricao}}</td>
+								</tr>
+							</tbody>
+						</table>
+					
+					<!-- Código -->
+						<table class="table table-striped" ng-if="codigoCheck">
+							<thead>
+								<tr>
+									<th style="width:150px;"> Código</th>
+									<th> Atividade</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="atividade in atividadesCodigo">
+									<td>{{atividade.codigoCNAE}}</td>
+									<td>{{atividade.descricao}}</td>
+								</tr>
+							</tbody>
+						</table>
+					
+					<!-- Ocupação -->
+						<table class="table table-striped" ng-if="ocupacaoCheck">
+							<thead>
+								<tr>
+									<th style="width:150px;"> Código</th>
+									<th> Atividade</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="ocupacao in atividadesOcupacao">
+									<td rowspan="{{ocupacao.atividades.length}}">{{ocupacao.codigo}}</td>
+									<td ng-repeat="atividade in ocupacao.atividades">{{atividade}}</td>
 								</tr>
 							</tbody>
 						</table>
