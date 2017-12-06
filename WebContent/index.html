@@ -1,65 +1,128 @@
 <!DOCTYPE html>
-<html>
-    <head>
-       <title>OntoCnae - Ontologia para consulta de CNAE para Mei's</title>
-       <meta charset="utf-8">
-       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-       <link rel="stylesheet" href="css/bootstrap.css">
-       <link rel="stylesheet" href="css/style.css">
+<html ng-app="MeiApp">
+	<head>
+		<title>OntoCnae - Ontologia para consulta de CNAE para Mei's</title>
+		<meta charset="utf-8">
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" href="css/bootstrap.css">
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+	<body ng-controller="MeiController">
+		<nav style="height: 100px; text-align:center;"
+			class="navbar navbar-expand-md navbar-light bg-dark fixed-top py-3 box-shadow ">
+				<span style="font-family:Verdana; color: white; font-size:36px;">ONTOCNAE</span>
+	
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+	
+			<!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="btn btn-outline-primary ml-md-3" href="index.html">Home</a>
+					</li>
+				</ul>
+			</div> -->
+		</nav>
+			
+		<section class="container-fluid mt-md-5">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="col-lg-10 btn-pesquisar">
+						<h2>Buscador de CNAE</h2>
+						<p>Abaixo voce poderá inserir uma descrição relacionada com a
+							atividade que será o ramo de atividade de sua microempresa - Mei</p>
 
-    </head>
-    <body>
-     
-     <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top py-3 box-shadow ">
-        <a href="index.html" class="navbar-brand">
-            <img src="img/caravan.svg" alt="">
-        </a>
+						<div class="navcnae">
+							<ul class="nav nav-tabs">
+							  <li class="nav-item" ng-click="trocarDescricao()">
+							    <a class="nav-link" ng-class="{active: descricaoCheck}" href="#">Descrição</a>
+							  </li>
+							  <li class="nav-item" ng-click="trocarOcupacao()">
+							    <a class="nav-link" ng-class="{active: ocupacaoCheck}" href="#">Ocupação</a>
+							  </li>
+							  <li class="nav-item" ng-click="trocarCodigo()">
+							    <a class="nav-link" ng-class="{active: codigoCheck}" href="#">Código</a>
+							  </li>
+							</ul>
+						</div>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-               <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		          Informações
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="#">Mei</a>
-		          <a class="dropdown-item" href="#">CNAE</a>
-		          <a class="dropdown-item" href="#">Sobre</a>
-		        </div>
-                <li class="nav-item">
-                    <a class="btn btn-outline-primary ml-md-3" href="buscar.html">Buscar CNAE</a>
-                </li>
-            </ul>
-        </div>
-     </nav>
-     
-     <section class="container-fluid">
-         <div class="row bg-dark text-white">
-            <div class="col-7"></div>
-            <div class="col-lg-5 p-4">
-                <h1 class="display-4">Qual CNAE usar para minha Mei ?</h1>
-                <p class="lead">Pesquisar códigos ou atividades econômicas na CNAE. O usuário pode encontrar, a partir da digitação da descrição de uma dada atividade os códigos das classes CNAE.</p>
-            </div>
-         </div>
-     </section>
-     
-     <section class="container">
-        <div class="row">
-           <div class="col-12" >
-              
-               
-           </div>
-        </div>
-     </section>
-     
-     
-     <script src="js/jquery-3.2.1.slim.min.js"></script>
-     <script src="js/popper.min.js"></script>
-     <script src="js/bootstrap.js"></script>
-     <script src="js/app.js"></script>
-    </body>
+						<div class="input-group input-group-lg ">
+							<input type="text" ng-model="descricao" class="form-control" placeholder="Buscar..." aria-label="Pesquisar CNAE...">
+							<span class="input-group-btn">
+								<button class="btn btn-primary" type="button" ng-click="buscar()">Buscar!</button>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	
+		<section class="container-fluid mt-md-5">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="col-lg-10 tabela">
+					
+					<!-- Descrição -->
+						<table class="table table-striped" ng-if="descricaoCheck">
+							<thead>
+								<tr>
+									<th style="width:150px;"> Código</th>
+									<th> Atividade</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="atividade in atividadesDescricao">
+									<td>{{atividade.codigoCNAE}}</td>
+									<td>{{atividade.descricao}}</td>
+								</tr>
+							</tbody>
+						</table>
+					
+					<!-- Código -->
+						<table class="table table-striped" ng-if="codigoCheck">
+							<thead>
+								<tr>
+									<th style="width:150px;"> Código</th>
+									<th> Atividade</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="atividade in atividadesCodigo">
+									<td>{{atividade.codigoCNAE}}</td>
+									<td>{{atividade.descricao}}</td>
+								</tr>
+							</tbody>
+						</table>
+					
+					<!-- Ocupação -->
+						<table class="table table-striped" ng-if="ocupacaoCheck">
+							<thead>
+								<tr>
+									<th style="width:150px;"> Código</th>
+									<th> Atividade</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="ocupacao in atividadesOcupacao">
+									<td rowspan="{{ocupacao.atividades.length}}">{{ocupacao.codigo}}</td>
+									<td ng-repeat="atividade in ocupacao.atividades">{{atividade}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+	
+		<script src="js/angular.min.js"></script>
+		<script src="js/jquery-3.2.1.slim.min.js"></script>
+		<script src="js/popper.min.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<script src="js/app.js"></script>
+	</body>
 </html>
